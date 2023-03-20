@@ -12,3 +12,5 @@ router.post('/', (req, res, next) =>{
         message: 'Handling POST for users'
     })
 });
+
+module.exports = router;
