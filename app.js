@@ -1,31 +1,79 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const User = require('./models/user');
 const app = express();
-const bodyParser = require('body-parser')
-const PORT = 5500;
+const port = 3000;
 
-const userRoutes = require('./routes/users');
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
-app.use('/users', userRoutes);
-    
-app.use((req, res, next) => {
-    const error = new Error('Not found');
-    error.status = 404;
-    next(error);
+// Start the server
+app.use(express.json());
+mongoose.connect('mongodb+srv://ZulKinar:681ae85y@skecthapi.oaokxjn.mongodb.net/?retryWrites=true&w=majority')
+        .then(() => {
+            console.log("Connected successfully!");
+            app.listen(port, () => {
+              console.log(`Server is running on port ${port}`);
+            });
+          }
+        )
+        .catch((error) => console.error(error));
+
+
+app.get('/users', async(req, res) => {
+    // res.json(users);
+    try{
+      const users = await User.find({});
+      res.status(200).json(users);
+    } catch (error){
+      res.status(500).json({message: error.message})
+    }
+})
+
+app.post('/users', async(req, res) => {
+  try{
+    const user = await User.create(req.body);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+})
+
+
+// User registration endpoint
+/*app.post('/register', (req, res) => {
+  const { name, lastName, email, password } = req.body;
+
+  // Check if the required fields are provided  
+  if (!name || !lastName || !email || !password) {
+    return res.status(400).json({ error: 'Please provide all the required fields' });
+  }
+
+  // Check if the email is already taken
+  if (users.some(user => user.email === email)) {
+    return res.status(400).json({ error: 'Email is already registered' });
+  }
+
+  // Create a new user object
+  const newUser = { name, lastName, email, password };
+
+  // Add the new user to the database
+  users.push(newUser);
+
+  // Return the newly created user
+  res.status(201).json({ message: 'User registered successfully', user: newUser });
 });
 
-app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-       error:{
-        message: error.message
-       }
-     })
-    }
-);
+// User login endpoint
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
 
- app.listen(PORT, () => console.log('API is running on ' + PORT));
- module.exports = app;
- 
+  // Find the user in the database
+  const user = users.find(user => user.email === email);
+
+  // Check if the user exists and the password is correct
+  if (!user || user.password !== password) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  // Return a success message
+  res.json({ message: 'Login successful', user });
+});*/
