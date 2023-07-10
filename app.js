@@ -11,6 +11,7 @@ app.use(express.json());
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   next();
 })
 
@@ -82,10 +83,26 @@ app.post('/users', async(req, res) => {
 
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({message: error.message})
+    res.status(500).json({message: error.message});
   }
 })
 
+app.delete('/users', async(req, res) => {
+  const {name, email} = req.body;
+  console.log(req.body);
+  console.log(name + " " + email);
+
+  try{
+    const deletedUser = await User.deleteOne({name: name, email: email});
+    if(deletedUser.deletedCount === 0){
+      res.status(404).json({message: 'The user was not found.'});
+    } else {
+      res.status(200).json({message: 'User deleted successfully.'});
+    }
+  } catch(error){
+    res.status(500).json({message: error.message});
+  }
+})
 
 // User registration endpoint
 /*app.post('/register', (req, res) => {
