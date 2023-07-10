@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const User = require('./models/user');
 const dblink = require('./.txt')
 const app = express();
-const port = 3000;
+const port = 5000;
 
 
 // Start the server
@@ -27,7 +27,6 @@ mongoose.connect(dblink)
 
 
 app.get('/users', async(req, res) => {
-    // res.json(users);
     try{
       const users = await User.find({});
       res.status(200).json(users);
@@ -48,8 +47,6 @@ app.get('/users/:id', async(req,res) =>{
 
 app.get('/login', async(req, res) => {
   const {name, password} = req.query;
-  console.log(name);
-  console.log(password);
 
   try{
     const user = await User.findOne({name: name, password: password});
@@ -65,9 +62,26 @@ app.get('/login', async(req, res) => {
 
 app.post('/users', async(req, res) => {
   try{
+
+    const { name, password, email } = req.body;
+
+    // Check if the required fields are provided  
+    if (!name || !password || !email) {
+      return res.status(400).json({ error: 'Please provide all the required fields' });
+    }
+    
+    // Check if the email is already taken
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser) {
+      return res.status(401).json({ error: 'Email is already registered' });
+    }
+    
     const user = await User.create(req.body);
     res.status(200).json(user);
+
+
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({message: error.message})
   }
 })
@@ -95,20 +109,4 @@ app.post('/users', async(req, res) => {
 
   // Return the newly created user
   res.status(201).json({ message: 'User registered successfully', user: newUser });
-});
-
-// User login endpoint
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-
-  // Find the user in the database
-  const user = users.find(user => user.email === email);
-
-  // Check if the user exists and the password is correct
-  if (!user || user.password !== password) {
-    return res.status(401).json({ error: 'Invalid credentials' });
-  }
-
-  // Return a success message
-  res.json({ message: 'Login successful', user });
 });*/
