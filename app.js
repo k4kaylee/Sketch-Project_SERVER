@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const User = require('./models/user');
+const dblink = require('./.txt')
 const app = express();
 const port = 3000;
 
@@ -14,7 +15,7 @@ app.use((req, res, next) => {
 })
 
 
-mongoose.connect('mongodb+srv://ZulKinar:681ae85y@skecthapi.oaokxjn.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect(dblink)
         .then(() => {
             console.log("Connected successfully!");
             app.listen(port, () => {

@@ -3,6 +3,7 @@ node_modules/
 
 # Ignore log files
 *.log
+.txt
 
 # Ignore build output
 /build/
