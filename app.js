@@ -7,6 +7,13 @@ const port = 3000;
 
 // Start the server
 app.use(express.json());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+})
+
+
 mongoose.connect('mongodb+srv://ZulKinar:681ae85y@skecthapi.oaokxjn.mongodb.net/?retryWrites=true&w=majority')
         .then(() => {
             console.log("Connected successfully!");
@@ -26,6 +33,33 @@ app.get('/users', async(req, res) => {
     } catch (error){
       res.status(500).json({message: error.message})
     }
+})
+
+app.get('/users/:id', async(req,res) =>{
+  try{
+    const id = req.params.id;
+    const user = await User.findById(id);
+    res.status(200).json(user);
+  }catch(error){
+    res.status(500).json({message: error.message})
+  }
+})
+
+app.get('/login', async(req, res) => {
+  const {name, password} = req.query;
+  console.log(name);
+  console.log(password);
+
+  try{
+    const user = await User.findOne({name: name, password: password});
+    if(!user){
+      res.status(404).json({message: 'The user was not found.'})
+    } else {
+      res.status(200).json(user);
+    }
+  }catch(error){
+    console.log(error.message)
+  }
 })
 
 app.post('/users', async(req, res) => {
