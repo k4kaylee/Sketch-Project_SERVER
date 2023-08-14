@@ -1,7 +1,18 @@
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
+const Chat = require('./chat')
 
 const userSchema = mongoose.Schema(
     {
+        id: {
+            type: String,
+            default: uuidv4,
+            unique: true,
+            required: true
+        },
+        avatar: {
+
+        }, 
         name: {
             type: String,
             required: [true, "User must have a name"]
@@ -13,6 +24,10 @@ const userSchema = mongoose.Schema(
         email: {
             type: String,
             required: [true, "User must have a valid email"]
+        },
+        chats: {
+            type: [ Chat.Schema ],
+            default: [ ],
         }
     },
     {
