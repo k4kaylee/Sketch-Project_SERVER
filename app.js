@@ -49,3 +49,4 @@ const chatController = require('./controllers/chatController');
 app.post('/chats', chatController.createChat);
 app.get('/chats/:id', chatController.getChatsByUserId);
 app.put('/chats/:id/messages', chatController.addMessage);
+app.delete('/chats/:chatId/messages/:messageId', chatController.removeMessage);

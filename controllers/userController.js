@@ -22,17 +22,17 @@ const getUserById = async (req, res) => {
     }
 };
 
-const loginUser = async (req, res) => {
-    const { name, password } = req.query;
+    const loginUser = async (req, res) => {
+        const { name, password } = req.query;
 
-    try {
-        const user = await User.findOne({ name: name, password: password });
+        try {
+            const user = await User.findOne({ name: name, password: password });
 
-        res.status(200).json({id: user.id, name: user.name});
-    } catch (error) {
-        console.log(error.message);
-    }
-};
+            res.status(200).json({id: user.id, name: user.name});
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
 
 const registerUser = async (req, res) => {
     app.post('/users', async (req, res) => {
