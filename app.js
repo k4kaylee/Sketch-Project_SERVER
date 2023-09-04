@@ -1,15 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const User = require('./models/user');
-const dblink = require('./.txt')
+require('dotenv').config();
+const dblink = process.env.MONGO_DBLINK;
 const app = express();
-const port = 5000;
+const port = process.env.port || 5000;
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const fsPromises = require('fs').promises;
-const path = require('path');
-const Chat = require('./models/chat')
-const { v4: uuidv4 } = require('uuid');
+
 
 // Start the server
 app.use(express.json());
@@ -22,19 +21,28 @@ app.use((req, res, next) => {
 })
 
 
-mongoose.connect(dblink)
-        .then(() => {
-            console.log("Connected successfully!");
-            app.listen(port, () => {
-              console.log(`Server is running on port ${port}`);
-            });
-          }
-        )
-        .catch((error) => console.error(error));
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(dblink);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
+connectDB().then(() => {
+  console.log("Connected successfully!");
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
+)
+  .catch((error) => console.error(error));
 
 
 
-const userController = require('./controllers/userController'); 
+const userController = require('./controllers/userController');
 
 app.get('/users', userController.getUserList);
 app.get('/users/:id', userController.getUserById);
@@ -47,6 +55,7 @@ app.delete('/users', userController.deleteUser);
 const chatController = require('./controllers/chatController');
 
 app.post('/chats', chatController.createChat);
-app.get('/chats/:id', chatController.getChatsByUserId);
+app.get('/chats/:chatId', chatController.getChatById);
+app.get('/chats/user/:id', chatController.getChatsByUserId);
 app.put('/chats/:id/messages', chatController.addMessage);
 app.delete('/chats/:chatId/messages/:messageId', chatController.removeMessage);

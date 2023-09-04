@@ -17,6 +17,22 @@ const createChat = async (req, res) => {
   }
 }
 
+const getChatById = async (req, res) => {
+  const chatId = req.params.chatId;
+
+  try {
+    const chat = await Chat.findOne({ id: chatId });
+    if (!chat) {
+      return res.status(404).json({ error: 'Chat not found' });
+    }
+    res.status(200).json(chat);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
 const getChatsByUserId = async (req, res) => {
   const userId = req.params.id;
   try {
@@ -80,6 +96,7 @@ const removeMessage = async (req, res) => {
 
 module.exports = {
   createChat,
+  getChatById,
   getChatsByUserId,
   addMessage,
   removeMessage
