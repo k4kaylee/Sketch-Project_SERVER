@@ -2,10 +2,10 @@ const Chat = require('../models/chat');
 const { v4: uuidv4 } = require('uuid');
 
 const createChat = async (req, res) => {
-  const { name, participantsId } = req.query;
+  const { name, participantsId, avatar } = req.query;
 
   try {
-    if (!name || !participantsId) {
+    if (!name || !participantsId || !avatar) {
       return res.status(400).json({ error: 'Insufficient data' });
     }
 
