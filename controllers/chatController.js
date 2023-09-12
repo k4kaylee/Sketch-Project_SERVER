@@ -2,14 +2,20 @@ const Chat = require('../models/chat');
 const { v4: uuidv4 } = require('uuid');
 
 const createChat = async (req, res) => {
-  const { name, participantsId, avatar } = req.query;
+  const { name, participantsId/*, avatar */ } = req.body;
 
   try {
-    if (!name || !participantsId || !avatar) {
+    if (!name || !participantsId /*|| !avatar*/) {
       return res.status(400).json({ error: 'Insufficient data' });
     }
 
-    const chat = await Chat.create(req.body);
+    const chat = await Chat.create({
+      name: name,
+      participantsID: participantsId,
+      /*avatar: avatar,*/
+      // messages: []
+    });
+    
     res.status(200).json(chat);
   } catch (error) {
     console.log(error.message);

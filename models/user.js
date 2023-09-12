@@ -28,6 +28,10 @@ const userSchema = mongoose.Schema(
         chats: {
             type: [ Chat.Schema ],
             default: [ ],
+        },
+        status: {
+            type: String,
+            default: 'Offline',
         }
     },
     {

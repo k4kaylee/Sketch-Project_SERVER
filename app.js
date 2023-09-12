@@ -5,9 +5,9 @@ require('dotenv').config();
 const dblink = process.env.MONGO_DBLINK;
 const app = express();
 const port = process.env.port || 5000;
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'); /* Not added yet */
 require('dotenv').config();
-const fsPromises = require('fs').promises;
+const WSServer = require('express-ws')(app);
 
 
 // Start the server
@@ -54,8 +54,38 @@ app.delete('/users', userController.deleteUser);
 
 const chatController = require('./controllers/chatController');
 
-app.post('/chats', chatController.createChat);
+app.put('/chats/user/:userId', chatController.createChat);
 app.get('/chats/:chatId', chatController.getChatById);
 app.get('/chats/user/:id', chatController.getChatsByUserId);
 app.put('/chats/:id/messages', chatController.addMessage);
 app.delete('/chats/:chatId/messages/:messageId', chatController.removeMessage);
+
+
+  app.ws('/', (ws, req) => {
+    ws.send('You are connected succesfully');
+    ws.on('message', (msg) => {
+      const message = JSON.parse(msg);
+      console.log(message.userId);
+      switch (message.method) {
+          case "connection": 
+              connectionHandler(message.userId, message.status)
+          break;
+      }
+    })
+  })
+
+  connectionHandler = async (userId, status) => {
+    console.log("ConnectionHandler");
+      try {
+        const user = await User.findOne({ id: userId });
+
+        if (user) {
+          user.status = status;
+    
+          await user.save();
+        } else
+          throw ("User not found!")
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
