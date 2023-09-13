@@ -65,17 +65,16 @@ app.delete('/chats/:chatId/messages/:messageId', chatController.removeMessage);
     ws.send('You are connected succesfully');
     ws.on('message', (msg) => {
       const message = JSON.parse(msg);
-      console.log(message.userId);
       switch (message.method) {
           case "connection": 
               connectionHandler(message.userId, message.status)
           break;
+          
       }
     })
   })
 
   connectionHandler = async (userId, status) => {
-    console.log("ConnectionHandler");
       try {
         const user = await User.findOne({ id: userId });
 
