@@ -17,9 +17,16 @@ const chatSchema = mongoose.Schema(
         avatar: {
             
         },
-        participantsID: {
-            type: [ String ],
-        },
+        participants: [
+            {
+                id: {
+                    type: String
+                },
+                name: {
+                    type: String
+                }
+            }
+        ],
         messages: [
             Message.schema
         ],

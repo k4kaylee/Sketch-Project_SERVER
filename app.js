@@ -1,13 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const User = require('./models/user');
 require('dotenv').config();
 const dblink = process.env.MONGO_DBLINK;
 const app = express();
 const port = process.env.port || 5000;
 const jwt = require('jsonwebtoken'); /* Not added yet */
 require('dotenv').config();
-const WSServer = require('express-ws')(app);
+const expressWs = require('express-ws');
+
 
 
 // Start the server
@@ -59,32 +59,3 @@ app.get('/chats/:chatId', chatController.getChatById);
 app.get('/chats/user/:id', chatController.getChatsByUserId);
 app.put('/chats/:id/messages', chatController.addMessage);
 app.delete('/chats/:chatId/messages/:messageId', chatController.removeMessage);
-
-
-  app.ws('/', (ws, req) => {
-    ws.send('You are connected succesfully');
-    ws.on('message', (msg) => {
-      const message = JSON.parse(msg);
-      switch (message.method) {
-          case "connection": 
-              connectionHandler(message.userId, message.status)
-          break;
-          
-      }
-    })
-  })
-
-  connectionHandler = async (userId, status) => {
-      try {
-        const user = await User.findOne({ id: userId });
-
-        if (user) {
-          user.status = status;
-    
-          await user.save();
-        } else
-          throw ("User not found!")
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
