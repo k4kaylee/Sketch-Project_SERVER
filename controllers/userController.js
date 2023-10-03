@@ -22,7 +22,13 @@ const getUserById = async (req, res) => {
     try {
         const id = req.params.id;
         const user = await User.findOne({id: id});
-        res.status(200).json(user);
+        res.status(200).json({
+                id: user.id,
+                name: user.name,
+                avatar: user.avatar,
+                status: user.status
+            }
+        );
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

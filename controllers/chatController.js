@@ -1,20 +1,19 @@
 const Chat = require('../models/chat');
-const { v4: uuidv4 } = require('uuid');
 
 const createChat = async (req, res) => {
-  const { name, participantsId/*, avatar */ } = req.body;
+  const { name, participants/*, avatar */ } = req.body;
 
   try {
-    if (!name || !participantsId /*|| !avatar*/) {
+    if (!name || !participants /*|| !avatar*/) {
       return res.status(400).json({ error: 'Insufficient data' });
     }
 
     const chat = await Chat.create({
       name: name,
-      participantsID: participantsId,
+      participants: participants,
       /*avatar: avatar,*/
-      // messages: []
     });
+
     
     res.status(200).json(chat);
   } catch (error) {
@@ -42,7 +41,7 @@ const getChatById = async (req, res) => {
 const getChatsByUserId = async (req, res) => {
   const userId = req.params.id;
   try {
-    const chats = await Chat.find({ participantsID: userId });
+    const chats = await Chat.find({ 'participants.id': userId}  );
 
     if (!chats || chats.length === 0) {
       return res.status(404).json({ message: 'Chats not found for the user' });
