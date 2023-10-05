@@ -25,10 +25,19 @@ const userSchema = mongoose.Schema(
             type: String,
             required: [true, "User must have a valid email"]
         },
-        chats: {
-            type: [ Chat.Schema ],
-            default: [ ],
-        },
+        chats: [
+            {
+                chat: {type: Chat.schema},
+                nameVocabulary: [{
+                    id: {
+                        type: String
+                    },
+                    name: {
+                        type: String
+                    },
+                }]
+            }
+        ],
         status: {
             type: String,
             default: 'Offline',
