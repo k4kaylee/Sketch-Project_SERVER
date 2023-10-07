@@ -22,13 +22,17 @@ io.on('connection', (socket) => {
       })
     }
     console.log(onlineUsers);
+
+    io.emit("getOnlineUsers", onlineUsers);
   });
+
 
   socket.on("disconnect", () => {
     console.log("disconnection: ", socket.id);
 
     onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
     console.log(onlineUsers);
+    io.emit("getOnlineUsers", onlineUsers);
   });
 });
 
