@@ -1,6 +1,6 @@
 const { Server } = require('socket.io'); 
 
-const io = new Server({ cors: "http://white-rabbit-slip.cyclic.app:5001" });
+const io = new Server({ cors: "https://white-rabbit-slip.cyclic.app" });
 
 let onlineUsers = [];
 
