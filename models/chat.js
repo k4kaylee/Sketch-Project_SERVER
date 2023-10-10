@@ -10,23 +10,28 @@ const chatSchema = mongoose.Schema(
             required: [true, 'ID is obligatory'],
             unique: true,
         },
-        name: {
-            type: String,
-            required: [true]
-        },
         avatar: {
-            
+            // Define the avatar field as needed
         },
         participants: [
             {
                 id: {
-                    type: String
+                    type: String,
+
                 },
                 name: {
-                    type: String
-                }
-            }
+                    type: String,
+                },
+            },
         ],
+        nameVocabulary: [{
+            id: {
+                type: String
+            },
+            name: {
+                type: String
+            },
+        }],
         messages: [
             Message.schema
         ],
@@ -36,6 +41,6 @@ const chatSchema = mongoose.Schema(
     }
 )
 
-const Chat = mongoose.model('Chat', chatSchema); 
+const Chat = mongoose.model('Chat', chatSchema);
 
 module.exports = Chat;

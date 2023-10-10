@@ -1,6 +1,6 @@
-const { Server } = require('socket.io'); 
+const { Server } = require('socket.io');
 
-const io = new Server({ cors: "http://localhost:5001" });
+const io = new Server({ cors: "https://white-rabbit-slip.cyclic.app" });
 
 let onlineUsers = [];
 
@@ -22,6 +22,8 @@ io.on('connection', (socket) => {
       })
     }
     console.log(onlineUsers);
+
+    io.emit("getOnlineUsers", onlineUsers);
   });
 
   socket.on("disconnect", () => {
@@ -29,7 +31,10 @@ io.on('connection', (socket) => {
 
     onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
     console.log(onlineUsers);
+    io.emit("getOnlineUsers", onlineUsers);
   });
 });
 
-io.listen(5001);
+io.listen(5001, () => {
+  console.log('Socket server listening on port 5001');
+});
