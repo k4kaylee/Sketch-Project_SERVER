@@ -2,6 +2,7 @@ const { Server } = require('socket.io');
 
 const io = new Server({ cors: { origin: "*" } });
 
+
 let onlineUsers = [];
 
 io.on('connection', (socket) => {
