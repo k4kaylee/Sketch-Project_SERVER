@@ -24,6 +24,15 @@ io.on('connection', (socket) => {
     }
     console.log(onlineUsers);
 
+    socket.on("sendMessage", (message) => {
+      const user = onlineUsers.find((user) => message.recipientId === user.id);
+
+      if(user){
+        io.to(user.socketId).emit("getMessage", message)
+      }
+      
+    })
+
     io.emit("getOnlineUsers", onlineUsers);
   });
 

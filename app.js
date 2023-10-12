@@ -10,7 +10,6 @@ const io = require('./sockets/socket.js')
 
 
 // Start the server 
-app.use(express.json());
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -19,6 +18,7 @@ app.use((req, res, next) => {
   next();
 })
 
+app.use(express.json());
 
 const connectDB = async () => {
   try {
