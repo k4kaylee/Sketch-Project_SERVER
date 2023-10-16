@@ -9,7 +9,10 @@ const messageSchema = new mongoose.Schema({
       unique: true,
       sparse: true
     },
-    author: String,
+    author: {
+      name: String,
+      id: String,
+    },
     content: String,
     time: String
   });
