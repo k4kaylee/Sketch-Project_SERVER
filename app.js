@@ -57,4 +57,5 @@ app.put('/chats/user/:userId', chatController.createChat);
 app.get('/chats/:chatId', chatController.getChatById);
 app.get('/chats/user/:id', chatController.getChatsByUserId);
 app.put('/chats/:id/messages', chatController.addMessage);
+app.put('/chats/:chatId/messages/:messageId', chatController.editMessage);
 app.delete('/chats/:chatId/messages/:messageId', chatController.removeMessage);
