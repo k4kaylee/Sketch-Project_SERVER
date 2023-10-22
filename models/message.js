@@ -13,6 +13,7 @@ const messageSchema = new mongoose.Schema({
       name: String,
       id: String,
     },
+    isEdited: Boolean,
     content: String,
     time: String
   });

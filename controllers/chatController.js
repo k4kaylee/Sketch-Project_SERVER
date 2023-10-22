@@ -87,8 +87,10 @@ const editMessage = async (req, res) => {
     if (messageIndex === -1) {
       return res.status(404).json({ message: 'Message not found' });
     }
-
+    
     chat.messages[messageIndex].content = body.content;
+    chat.messages[messageIndex].isEdited = true;
+  
 
     await chat.save();
 
